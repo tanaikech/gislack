@@ -177,15 +177,23 @@ func (s *slackContainer) slackSubmitReq() *utl.RequestParams {
 func (p *iniparamsContainer) doubleSubmittingDisp(ar map[string]interface{}) {
 	res, _ := ar["r1"].([][]byte)
 	d := &doubleResults{}
-	if json.Unmarshal(res[0], &d.Slack); d.Slack.OK {
-		json.Unmarshal(res[1], &d.Gist)
-	} else {
-		json.Unmarshal(res[0], &d.Gist)
+	if json.Unmarshal(res[0], &d.Gist); d.Gist.ID != "" {
 		json.Unmarshal(res[1], &d.Slack)
+	} else {
+		json.Unmarshal(res[0], &d.Slack)
+		json.Unmarshal(res[1], &d.Gist)
 	}
-	d.Gist.CreatedAt = d.Gist.CreatedAt.In(time.Local)
-	d.Gist.UpdatedAt = d.Gist.UpdatedAt.In(time.Local)
-	d.Slack.File.CreatedTime = time.Unix(d.Slack.File.Created, 0)
+	if d.Gist.ID == "" && !d.Slack.OK {
+		fmt.Printf("Error: The file couldn't submit to Gist and Slack.\n")
+		os.Exit(1)
+	}
+	if d.Gist.ID != "" {
+		d.Gist.CreatedAt = d.Gist.CreatedAt.In(time.Local)
+		d.Gist.UpdatedAt = d.Gist.UpdatedAt.In(time.Local)
+	}
+	if d.Slack.OK {
+		d.Slack.File.CreatedTime = time.Unix(d.Slack.File.Created, 0)
+	}
 	if p.jsonControl.Options["simpleresult"].(bool) {
 		d.simpleResult()
 		return
@@ -205,10 +213,26 @@ func (p *iniparamsContainer) doubleSubmittingDisp(ar map[string]interface{}) {
 // simpleResult : Display simple results
 func (d *doubleResults) simpleResult() {
 	fmt.Printf(
-		"{\"gist_created_at\": \"%s\", \"gist_id\": \"%s\", \"slack_created_at\": \"%s\", \"slack_id\": \"%s\"}",
-		d.Gist.CreatedAt.Format("20060102_15:04:05"),
+		"{\"gist_created_at\": \"%s\", \"gist_id\": \"%s\", \"slack_created_at\": \"%s\", \"slack_id\": \"%s\"}\n",
+		func(d *doubleResults) string {
+			var outmsg string
+			if d.Gist.ID != "" {
+				outmsg = string(d.Gist.CreatedAt.Format("20060102_15:04:05"))
+			} else {
+				outmsg = "Error: The file couldn't submit."
+			}
+			return outmsg
+		}(d),
 		d.Gist.ID,
-		d.Slack.File.CreatedTime.Format("20060102_15:04:05"),
+		func(d *doubleResults) string {
+			var outmsg string
+			if d.Slack.OK {
+				outmsg = string(d.Slack.File.CreatedTime.Format("20060102_15:04:05"))
+			} else {
+				outmsg = "Error: " + d.Slack.Error
+			}
+			return outmsg
+		}(d),
 		d.Slack.File.ID,
 	)
 	return

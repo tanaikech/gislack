@@ -15,7 +15,7 @@ func main() {
 	app.Author = "tanaike [ https://github.com/tanaikech/gislack ] "
 	app.Email = "tanaike@hotmail.com"
 	app.Usage = "Submit files to Gist, Slack and both."
-	app.Version = "1.0.0"
+	app.Version = "1.0.1"
 	app.Commands = []cli.Command{
 		{
 			Name:        "gist",

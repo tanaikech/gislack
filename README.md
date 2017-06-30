@@ -325,4 +325,8 @@ gislack can be controlled by JSON data. Using this, gislack may be used except f
 
     Initial release.
 
+* v1.0.1 (June 30, 2017)
+
+    Some modifications related to error handling.
+
 [TOP](#TOP)
