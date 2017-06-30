@@ -370,6 +370,15 @@ func (g *gistContainer) gistSubmit() *gistContainer {
 	return g
 }
 
+// simpleDisp : Display simple results
+func (g *gistContainer) simpleDisp() {
+	fmt.Printf(
+		"{\"gist_created_at\": \"%s\", \"gist_id\": \"%s\"}\n",
+		g.GistGetList[0].CreatedAt,
+		g.GistGetList[0].ID,
+	)
+}
+
 // gistDel : Delete a gist
 func (g *gistContainer) gistDel() {
 	r := &utl.RequestParams{

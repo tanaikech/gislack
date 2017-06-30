@@ -55,7 +55,12 @@ func gist(c *cli.Context) error {
 	}
 	if len(c.String("title")) > 0 && len(c.String("files")) > 0 &&
 		(len(c.String("updateoverwrite")) == 0 && len(c.String("updateadd")) == 0) {
-		g.defGistContainer().gistSubmit().disp()
+		g.defGistContainer().gistSubmit()
+		if c.Bool("simpleresult") {
+			g.simpleDisp()
+		} else {
+			g.disp()
+		}
 		return nil
 	}
 	if (len(c.String("updateoverwrite")) > 0 || len(c.String("updateadd")) > 0) &&
@@ -321,13 +326,15 @@ func (g *gistContainer) disphis() error {
 
 // disp : Display results for Slack
 func (s *slackContainer) disp() error {
-	var result []byte
-	if s.jsonControl.Options["jsonparser"].(bool) {
-		result, _ = json.MarshalIndent(s.slackParams.SlackFileList, "", "  ")
-	} else {
-		result, _ = json.Marshal(s.slackParams.SlackFileList)
+	if !s.jsonControl.Options["simpleresult"].(bool) {
+		var result []byte
+		if s.jsonControl.Options["jsonparser"].(bool) {
+			result, _ = json.MarshalIndent(s.slackParams.SlackFileList, "", "  ")
+		} else {
+			result, _ = json.Marshal(s.slackParams.SlackFileList)
+		}
+		fmt.Println(string(result))
 	}
-	fmt.Println(string(result))
 	return nil
 }
 

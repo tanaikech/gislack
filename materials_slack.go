@@ -126,8 +126,8 @@ type slackFileList struct {
 		User        string    `json:"user,omitempty"`
 		Channels    []string  `json:"channels,omitempty"`
 	} `json:"file,omitempty"`
-	Error   string `json:"error"`
-	Channel string `json:"channel"`
+	Error   string `json:"error,omitempty"`
+	Channel string `json:"channel,omitempty"`
 }
 
 // slackDelFile : Struct for deleting files
@@ -508,6 +508,13 @@ func (s *slackContainer) slackSubmit() *slackContainer {
 		os.Exit(1)
 	}
 	s.slackParams.SlackFileList.File.CreatedTime = time.Unix(s.slackParams.SlackFileList.File.Created, 0)
+	if s.jsonControl.Options["simpleresult"].(bool) {
+		fmt.Printf(
+			"{\"slack_created_at\": \"%s\", \"slack_id\": \"%s\"}\n",
+			s.slackParams.SlackFileList.File.CreatedTime.Format("20060102_15:04:05"),
+			s.slackParams.SlackFileList.File.ID,
+		)
+	}
 	return s
 }
 

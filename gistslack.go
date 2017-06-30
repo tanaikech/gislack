@@ -15,7 +15,7 @@ func main() {
 	app.Author = "tanaike [ https://github.com/tanaikech/gislack ] "
 	app.Email = "tanaike@hotmail.com"
 	app.Usage = "Submit files to Gist, Slack and both."
-	app.Version = "1.0.1"
+	app.Version = "1.0.2"
 	app.Commands = []cli.Command{
 		{
 			Name:        "gist",
@@ -79,6 +79,10 @@ func main() {
 				cli.BoolFlag{
 					Name:  "anonymous",
 					Usage: "Warning : Submit files as anonymous.",
+				},
+				cli.BoolFlag{
+					Name:  "simpleresult, s",
+					Usage: "Displays simple results.",
 				},
 				cli.BoolFlag{
 					Name:  "jsonparser, j",
@@ -161,6 +165,10 @@ func main() {
 					Name:  "deletehistories, dhs",
 					Usage: "Value is number of histories you want to delete.",
 					Value: 0,
+				},
+				cli.BoolFlag{
+					Name:  "simpleresult, s",
+					Usage: "Displays simple results.",
 				},
 				cli.BoolFlag{
 					Name:  "jsonparser, j",
