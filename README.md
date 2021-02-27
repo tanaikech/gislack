@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/tanaikech/gislack.svg?branch=master)](https://travis-ci.org/tanaikech/gislack)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENCE)
 
-<a name="TOP"></a>
+<a name="top"></a>
 
 # Overview
 
@@ -368,4 +368,13 @@ gislack can be controlled by JSON data. Using this, gislack may be used except f
 
   1. It seems that the specification of `github.com/urfave/cli` was changed by the update of [https://github.com/urfave/cli](https://github.com/urfave/cli). By this, when `go get -u github.com/tanaikech/gislack` is run, an error occurred. So this error was removed.
 
-[TOP](#TOP)
+<a name="v104"></a>
+
+- v1.0.4 (February 27, 2021)
+
+  1. I noticed that this application uses the duplicated methods of Slack API. [Ref](https://api.slack.com/methods) By this, the duplicated methods were updated to the new methods as follows.
+
+     - From "channels.list" to "conversations.list".
+     - From "channels.history" to "conversations.history".
+
+[TOP](#top)

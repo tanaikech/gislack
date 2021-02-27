@@ -187,8 +187,9 @@ func (s *slackContainer) slackGetChannels() *slackContainer {
 	p := url.Values{}
 	p.Set("token", s.slackParams.Token)
 	r := &utl.RequestParams{
-		Method:      "GET",
-		APIURL:      slackurl + "channels.list?" + p.Encode(),
+		Method: "GET",
+		// APIURL: slackurl + "channels.list?" + p.Encode(),  // Old endpoint
+		APIURL:      slackurl + "conversations.list?" + p.Encode(), // New endpoint
 		Data:        nil,
 		Contenttype: "application/x-www-form-urlencoded",
 		Dtime:       10,
@@ -366,8 +367,9 @@ func (s *slackContainer) slackGetChannelHistory() *slackContainer {
 	p.Set("latest", s.ChannelHistory.Latest)
 	p.Set("count", strconv.FormatInt(1000, 10))
 	r := &utl.RequestParams{
-		Method:      "POST",
-		APIURL:      slackurl + "channels.history?" + p.Encode(),
+		Method: "POST",
+		// APIURL:      slackurl + "channels.history?" + p.Encode(),  // Old endpoint
+		APIURL:      slackurl + "conversations.history?" + p.Encode(), // New endpoint
 		Data:        nil,
 		Contenttype: "application/x-www-form-urlencoded",
 		Dtime:       10,
